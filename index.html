@@ -23,6 +23,23 @@
 
     </div>
 
+    <div id="frm" class="modal hide fade">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 class="judul">Modal header</h3>
+      </div>
+      <div class="modal-body">
+        <form>
+          <label>Kata</label><input type="text" name="kata">
+          <label>Arti</label><input type="text" name="arti">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn">Close</a>
+        <a id="savebtn"  href="#" class="btn btn-primary">Save changes</a>
+      </div>
+    </div>
+
     <script id="itemDetail" type="text/template">
       <h1> <%= kata %> </h1>
       <p> arti : <%= arti %> </p>

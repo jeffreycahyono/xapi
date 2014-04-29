@@ -44,6 +44,42 @@ $(".menuitem").click(function(){
     $(this).addClass('active');
 });
 
+function showFrm(judul,kata, arti){
+    var isCreate = _.isEmpty(kata);
+
+    kata = kata || '';
+    arti = arti || '';
+    $('.judul').html(judul);
+    $('[name="kata"]').val(kata);
+    $('[name="arti"]').val(arti);
+    $('#savebtn').data('isCreate', isCreate);
+    $('#frm').modal('show');
+}
+
+$('#savebtn').click(function(){
+    var data = {
+        kata : $('[name="kata"]').val(),
+        arti : $('[name="arti"]').val()
+    };
+    var isCreate = $('#savebtn').data('isCreate');
+
+    var options = {
+        data :  JSON.stringify(data),
+        processData : false,
+        type : (isCreate) ? 'POST' : 'PUT',
+    };
+    var url = apiUrl;
+    $.ajax(url, options)
+        .done(function(data){
+            alert('Berhasil menambah kata '+ data.kata);
+            redrawList();
+        })
+        .fail(function(xhr){
+            alert('Gagal menambah kata : ' + xhr.responseText);
+        });
+    $('#frm').modal('hide');
+});
+
 $('body').on('click', '[data-action]', function(){
     var data = $(this).data(),
         action  = data.action,
@@ -55,13 +91,15 @@ $('body').on('click', '[data-action]', function(){
         drawDetail(kata);
 
     }
+    else if( action  == 'tambah'){
+        showFrm('Tambah Kata');
+    }
     //alert("Action adalah "+  data.action);
 });
 
-
-
-
-
+$(function(){
+    redrawList();
+});
 
 
 
