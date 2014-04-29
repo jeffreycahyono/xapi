@@ -23,10 +23,16 @@
 
     </div>
 
+    <script id="itemDetail" type="text/template">
+      <h1> <%= kata %> </h1>
+      <p> arti : <%= arti %> </p>
+    </script>
+
+
     <script id="listFrame" type="text/template">
       <table class="table">
-        <thead><th>Kata</th> <th>Arti</th>
-          <th>Aksi</th>
+        <thead>
+          <tr><th>Kata</th> <th>Arti</th><th>Aksi</th></tr>
         </thead>
 
         <%= content %>
@@ -34,7 +40,13 @@
     </script>
 
     <script id="itemKata" type="text/template">
-      <tr><td> <%= kata %> </td><td><%= arti %></td> </tr>
+      <tr><td> <%= kata %> </td><td><%= arti %></td>
+        <td>
+          <a data-kata="<%= kata %>" data-action="view" class="btn">Lihat</a>
+          <a data-kata="<%= kata %>" data-action="edit" class="btn">Sunting</a>
+          <a data-kata="<%= kata %>" data-action="del" class="btn">Hapus</a>
+        </td>
+      </tr>
     </script>
 
 

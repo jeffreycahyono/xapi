@@ -1,6 +1,7 @@
 var apiUrl = '/xapi/api/kamus';
 var tplItemKata = _.template($('#itemKata').html());
 var tplListFrame = _.template($('#listFrame').html());
+var tplItemDetail = _.template($('#itemDetail').html());
 
 
 
@@ -22,7 +23,20 @@ function redrawList(){
         });
 }
 
+function fetchDetail(kata, callback){
+    $.getJSON(apiUrl + '/' + encodeURIComponent(kata))
+        .done(function(data){
+            callback(data);
+        });
+}
 
+function drawDetail(kata){
+    var draw  = function(data){
+        $('#mainbox').html( tplItemDetail(data) );
+    };
+
+    fetchDetail(kata, draw);
+}
 
 
 $(".menuitem").click(function(){
@@ -32,9 +46,22 @@ $(".menuitem").click(function(){
 
 $('body').on('click', '[data-action]', function(){
     var data = $(this).data(),
-        action  = data.action;
+        action  = data.action,
+        kata = data.kata || '';
     if(action == 'list'){
         redrawList();
     }
+    else if (action == 'view'){
+        drawDetail(kata);
+
+    }
     //alert("Action adalah "+  data.action);
 });
+
+
+
+
+
+
+
+
