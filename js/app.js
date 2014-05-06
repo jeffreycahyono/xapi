@@ -3,6 +3,7 @@ var tplItemKata = _.template($('#itemKata').html());
 var tplListFrame = _.template($('#listFrame').html());
 var tplItemDetail = _.template($('#itemDetail').html());
 
+var listKata = null;
 
 
 function htmlRedrawList(data){
@@ -19,6 +20,7 @@ function htmlRedrawList(data){
 function redrawList(){
     $.getJSON(apiUrl)
         .done(function(data ){
+            listKata = data;
             htmlRedrawList(data);
         });
 }
@@ -44,7 +46,7 @@ $(".menuitem").click(function(){
     $(this).addClass('active');
 });
 
-function showFrm(judul,kata, arti){
+function showFrm(judul,kata, arti) {
     var isCreate = _.isEmpty(kata);
 
     kata = kata || '';
@@ -69,6 +71,8 @@ $('#savebtn').click(function(){
         type : (isCreate) ? 'POST' : 'PUT',
     };
     var url = apiUrl;
+    if(!isCreate)
+        url = url + '/' + data.kata;
     $.ajax(url, options)
         .done(function(data){
             alert('Berhasil menambah kata '+ data.kata);
@@ -79,6 +83,23 @@ $('#savebtn').click(function(){
         });
     $('#frm').modal('hide');
 });
+
+function delKata(kata){
+    var url = apiUrl + '/' + kata;
+    options = {
+        type : 'DELETE',
+    };
+
+    $.ajax(url, options)
+        .done(function(data){
+            alert('Berhasil menghapus kata '+ kata);
+            redrawList();
+        })
+        .fail(function(xhr){
+            alert('Gagal menghapus kata : ' +
+                xhr.responseText);
+        });
+}
 
 $('body').on('click', '[data-action]', function(){
     var data = $(this).data(),
@@ -93,6 +114,19 @@ $('body').on('click', '[data-action]', function(){
     }
     else if( action  == 'tambah'){
         showFrm('Tambah Kata');
+    }
+    else if(action  == 'edit'){
+        var objedit = _.find(listKata,function(obj, key){
+            if(key==kata)
+                return obj;
+        });
+        showFrm('Edit Kata',objedit.kata, objedit.arti);
+        //console.log(objedit);
+    }
+    else if(action == 'del'){
+        if( confirm('Yakin menghapus kata ' + kata)){
+            delKata(kata);
+        }
     }
     //alert("Action adalah "+  data.action);
 });
